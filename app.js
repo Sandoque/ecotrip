@@ -137,6 +137,12 @@ function renderComparison(distancia) {
         onibus: 'Ônibus',
         caminhao: 'Caminhão'
     };
+    const icons = {
+        bicicleta: 'bicycle',
+        carro: 'car',
+        onibus: 'bus',
+        caminhao: 'truck'
+    };
     const container = document.querySelector('.comparison-cards');
     const cardsHtml = Object.keys(EMISSION_FACTORS).map(modal => {
         const emissao = calculateEmission(distancia, modal);
@@ -146,7 +152,7 @@ function renderComparison(distancia) {
             : '';
         return `
             <div class="comparison-card">
-                <i class="fas fa-${modal === 'onibus' ? 'bus' : modal === 'caminhao' ? 'truck' : modal}"></i>
+                <i class="fas fa-${icons[modal]}"></i>
                 <h3>${titles[modal]}</h3>
                 <p><strong>${formatted.primary}</strong></p>
                 ${secondaryLine}
