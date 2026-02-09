@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora EcoTrip</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<body>
+    <header>
+        <h1>EcoTrip</h1>
+        <p>Simulador de Impacto Ambiental para Viagens</p>
+    </header>
+    <main>
+        <section id="form-section">
+            <form id="trip-form">
+                <div class="input-group">
+                    <label for="origem">Origem:</label>
+                    <input type="text" id="origem" name="origem" required autocomplete="off">
+                    <ul id="autocomplete-origem" class="autocomplete-list"></ul>
+                </div>
+                <div class="input-group">
+                    <label for="destino">Destino:</label>
+                    <input type="text" id="destino" name="destino" required autocomplete="off">
+                    <ul id="autocomplete-destino" class="autocomplete-list"></ul>
+                </div>
+                <div class="input-group">
+                    <label for="distancia">Distância (km):</label>
+                    <input type="number" id="distancia" name="distancia" placeholder="Opcional (auto pelo mapa)">
+                </div>
+                <div class="modal-selection">
+                    <p>Escolha o modal de transporte:</p>
+                    <div class="transport-cards">
+                        <div class="transport-card" data-modal="bicicleta" onclick="selectModal('bicicleta')" aria-label="Selecionar Bicicleta">
+                            <i class="fas fa-bicycle"></i>
+                            <span>Bicicleta</span>
+                        </div>
+                        <div class="transport-card" data-modal="carro" onclick="selectModal('carro')" aria-label="Selecionar Carro">
+                            <i class="fas fa-car"></i>
+                            <span>Carro</span>
+                        </div>
+                        <div class="transport-card" data-modal="onibus" onclick="selectModal('onibus')" aria-label="Selecionar Ônibus">
+                            <i class="fas fa-bus"></i>
+                            <span>Ônibus</span>
+                        </div>
+                        <div class="transport-card" data-modal="caminhao" onclick="selectModal('caminhao')" aria-label="Selecionar Caminhão">
+                            <i class="fas fa-truck"></i>
+                            <span>Caminhão</span>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit">Calcular</button>
+                <div id="error-message" class="error" style="display: none;"></div>
+            </form>
+        </section>
+        <section id="result-section" style="display: none;">
+            <h2>Resultado da Emissão</h2>
+            <div id="result-content">
+                <p><strong>Origem:</strong> <span id="result-origem"></span></p>
+                <p><strong>Destino:</strong> <span id="result-destino"></span></p>
+                <p><strong>Distância:</strong> <span id="result-distancia"></span> km <small id="distance-note"></small></p>
+                <p><strong>Modal Escolhido:</strong> <span id="result-modal"></span></p>
+                <p><strong>Emissão:</strong> <span id="result-emissao"></span></p>
+            </div>
+        </section>
+        <section id="comparison-section" style="display: none;">
+            <h2>Comparação entre Modais</h2>
+            <div class="comparison-cards">
+                <div class="comparison-card">
+                    <i class="fas fa-bicycle"></i>
+                    <h3>Bicicleta</h3>
+                    <p>Emissão: <span id="comp-bicicleta"></span> kg CO₂</p>
+                </div>
+                <div class="comparison-card">
+                    <i class="fas fa-car"></i>
+                    <h3>Carro</h3>
+                    <p>Emissão: <span id="comp-carro"></span> kg CO₂</p>
+                </div>
+                <div class="comparison-card">
+                    <i class="fas fa-bus"></i>
+                    <h3>Ônibus</h3>
+                    <p>Emissão: <span id="comp-onibus"></span> kg CO₂</p>
+                </div>
+                <div class="comparison-card">
+                    <i class="fas fa-truck"></i>
+                    <h3>Caminhão</h3>
+                    <p>Emissão: <span id="comp-caminhao"></span> kg CO₂</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>Estimativas para fins educativos. Fatores aproximados para fins ilustrativos.</p>
+    </footer>
+    <script src="app.js"></script>
+</body>
+    <script src="app.js"></script>
+</body>
+</html>
