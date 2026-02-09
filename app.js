@@ -1,8 +1,13 @@
 // Constantes
+// Fatores de emissão em kg CO₂ por passageiro-km (estimativas para demo)
 const EMISSION_FACTORS = {
+    // Bicicleta: zero emissão direta
     bicicleta: 0,
+    // Carro médio por passageiro-km
     carro: 0.192,
+    // Ônibus por passageiro-km (inferior ao carro, simplificado)
     onibus: 0.105,
+    // Caminhão por passageiro-km (alto, aproximado)
     caminhao: 0.800
 };
 
@@ -96,9 +101,9 @@ function formatEmission(emissionKg) {
     const kg = formatNumber(emissionKg);
     if (emissionKg < 1) {
         const g = formatNumber(emissionKg * 1000);
-        return `${kg} kg (${g} g) CO₂`;
+        return { primary: `${kg} kg CO₂`, secondary: `${g} g` };
     }
-    return `${kg} kg CO₂`;
+    return { primary: `${kg} kg CO₂`, secondary: '' };
 }
 
 // Renderizar resultado
@@ -107,7 +112,18 @@ function renderResult(origem, destino, distancia, modal, emissao, isAutoDistance
     document.getElementById('result-destino').textContent = destino;
     document.getElementById('result-distancia').textContent = formatNumber(distancia);
     document.getElementById('result-modal').textContent = modal.charAt(0).toUpperCase() + modal.slice(1);
-    document.getElementById('result-emissao').textContent = formatEmission(emissao);
+    const formattedEmission = formatEmission(emissao);
+    const emissionEl = document.getElementById('result-emissao');
+    emissionEl.textContent = formattedEmission.primary;
+    let secondaryEl = document.getElementById('result-emissao-secondary');
+    if (!secondaryEl) {
+        secondaryEl = document.createElement('small');
+        secondaryEl.id = 'result-emissao-secondary';
+        emissionEl.parentElement.appendChild(document.createElement('br'));
+        emissionEl.parentElement.appendChild(secondaryEl);
+    }
+    secondaryEl.textContent = formattedEmission.secondary;
+    secondaryEl.style.display = formattedEmission.secondary ? 'inline' : 'none';
     const note = document.getElementById('distance-note');
     note.textContent = isAutoDistance ? '(calculada automaticamente)' : '';
     document.getElementById('result-section').style.display = 'block';
@@ -115,10 +131,29 @@ function renderResult(origem, destino, distancia, modal, emissao, isAutoDistance
 
 // Renderizar comparação
 function renderComparison(distancia) {
-    Object.keys(EMISSION_FACTORS).forEach(modal => {
+    const titles = {
+        bicicleta: 'Bicicleta',
+        carro: 'Carro',
+        onibus: 'Ônibus',
+        caminhao: 'Caminhão'
+    };
+    const container = document.querySelector('.comparison-cards');
+    const cardsHtml = Object.keys(EMISSION_FACTORS).map(modal => {
         const emissao = calculateEmission(distancia, modal);
-        document.getElementById(`comp-${modal}`).textContent = formatEmission(emissao);
-    });
+        const formatted = formatEmission(emissao);
+        const secondaryLine = formatted.secondary
+            ? `<small>${formatted.secondary}</small>`
+            : '';
+        return `
+            <div class="comparison-card">
+                <i class="fas fa-${modal === 'onibus' ? 'bus' : modal === 'caminhao' ? 'truck' : modal}"></i>
+                <h3>${titles[modal]}</h3>
+                <p><strong>${formatted.primary}</strong></p>
+                ${secondaryLine}
+            </div>
+        `;
+    }).join('');
+    container.innerHTML = cardsHtml;
     document.getElementById('comparison-section').style.display = 'block';
 }
 
